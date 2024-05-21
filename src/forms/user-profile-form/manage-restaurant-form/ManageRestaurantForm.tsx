@@ -82,7 +82,7 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
 
     const updatedRestaurant = {
       ...restaurant,
-      deliverPrice: deliveryPriceFormatted,
+      deliveryPrice: deliveryPriceFormatted,
       menuItems: menuItemsFormatted,
     };
 
