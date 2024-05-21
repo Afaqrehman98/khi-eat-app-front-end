@@ -15,33 +15,33 @@ import { useEffect } from "react";
 const formSchema = z
   .object({
     restaurantName: z.string({
-      required_error: "reataurant name is required",
+      required_error: "restuarant name is required",
     }),
     city: z.string({
-      required_error: "City is required",
+      required_error: "city is required",
     }),
     country: z.string({
-      required_error: "Country is required",
+      required_error: "country is required",
     }),
     deliveryPrice: z.coerce.number({
-      required_error: "Delivery Price is required",
+      required_error: "delivery price is required",
       invalid_type_error: "must be a valid number",
     }),
     estimatedDeliveryTime: z.coerce.number({
-      required_error: "Estimated Delivery Time is required",
+      required_error: "estimated delivery time is required",
       invalid_type_error: "must be a valid number",
     }),
     cuisines: z.array(z.string()).nonempty({
-      message: "Please Select One Item",
+      message: "please select at least one item",
     }),
     menuItems: z.array(
       z.object({
-        name: z.string().min(1, "Name is required"),
-        price: z.coerce.number().min(1, "Price is required"),
+        name: z.string().min(1, "name is required"),
+        price: z.coerce.number().min(1, "price is required"),
       })
     ),
     imageUrl: z.string().optional(),
-    imageFile: z.instanceof(File, { message: "Image is Required " }).optional(),
+    imageFile: z.instanceof(File, { message: "image is required" }).optional(),
   })
   .refine((data) => data.imageUrl || data.imageFile, {
     message: "Either image URL or image File must be provided",
@@ -70,7 +70,7 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
       return;
     }
 
-    // Price in lowest domination
+    // price lowest domination of 100 = 100pence == 1GBP
     const deliveryPriceFormatted = parseInt(
       (restaurant.deliveryPrice / 100).toFixed(2)
     );
@@ -95,6 +95,7 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
     formData.append("restaurantName", formDataJson.restaurantName);
     formData.append("city", formDataJson.city);
     formData.append("country", formDataJson.country);
+
     formData.append(
       "deliveryPrice",
       (formDataJson.deliveryPrice * 100).toString()
@@ -106,7 +107,6 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
     formDataJson.cuisines.forEach((cuisine, index) => {
       formData.append(`cuisines[${index}]`, cuisine);
     });
-
     formDataJson.menuItems.forEach((menuItem, index) => {
       formData.append(`menuItems[${index}][name]`, menuItem.name);
       formData.append(
@@ -121,6 +121,7 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
 
     onSave(formData);
   };
+
   return (
     <Form {...form}>
       <form
